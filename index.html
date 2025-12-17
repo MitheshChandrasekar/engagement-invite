@@ -426,7 +426,7 @@
                 </div>
             </div>
 
-            <p class="message">"Two souls with but a single thought,<br>Side by side, where every moment shines."</p>
+            <p class="message">"Two souls with but a single thought,<br>Two hearts that beat as one"</p>
             
             <button class="location-btn" onclick="openLocation()">
                 📍 View Venue Location
@@ -440,9 +440,9 @@
         🔇
     </button>
 
-    <!-- Background Music -->
-    <audio id="bgMusic" loop preload="auto">
-        <source src="https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Kevin_MacLeod/Impact/Kevin_MacLeod_-_01_-_Wallpaper.mp3" type="audio/mpeg">
+    <!-- Background Music - Replace with your own music file -->
+    <audio id="bgMusic" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
     </audio>
 
     <script>
@@ -501,25 +501,23 @@
         const music = document.getElementById('bgMusic');
         const musicBtn = document.getElementById('musicBtn');
 
+        // Set initial volume
+        music.volume = 0.5;
+
         function toggleMusic() {
-            if (isPlaying) {
+            if (!isPlaying) {
+                music.play().then(() => {
+                    isPlaying = true;
+                    musicBtn.textContent = '🔊';
+                    musicBtn.title = 'Click to pause music';
+                }).catch(err => {
+                    console.error('Playback failed:', err);
+                });
+            } else {
                 music.pause();
+                isPlaying = false;
                 musicBtn.textContent = '🔇';
                 musicBtn.title = 'Click to play music';
-                isPlaying = false;
-            } else {
-                const playPromise = music.play();
-                if (playPromise !== undefined) {
-                    playPromise.then(() => {
-                        musicBtn.textContent = '🔊';
-                        musicBtn.title = 'Click to pause music';
-                        isPlaying = true;
-                    }).catch(err => {
-                        console.log('Play failed:', err);
-                        musicBtn.textContent = '🔇';
-                        isPlaying = false;
-                    });
-                }
             }
         }
 

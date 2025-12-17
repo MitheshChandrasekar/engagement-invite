@@ -426,7 +426,7 @@
                 </div>
             </div>
 
-            <p class="message">"Two souls with but a single thought,<br>Side by side, where every moment shines."</p>
+            <p class="message">"Two souls with but a single thought,<br>Side by side,, where every moment shines."</p>
             
             <button class="location-btn" onclick="openLocation()">
                 📍 View Venue Location
@@ -529,6 +529,32 @@
         // Initialize
         window.addEventListener('load', () => {
             createFloatingHearts();
+            
+            // Auto-play music on load
+            setTimeout(() => {
+                music.play().then(() => {
+                    isPlaying = true;
+                    musicBtn.textContent = '🔊';
+                    musicBtn.title = 'Click to pause music';
+                }).catch(() => {
+                    console.log('Autoplay blocked - user must click');
+                });
+            }, 500);
+        });
+
+        // Pause music when user leaves page
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                music.pause();
+            } else if (isPlaying) {
+                music.play();
+            }
+        });
+
+        // Stop music when leaving page
+        window.addEventListener('beforeunload', () => {
+            music.pause();
+            music.currentTime = 0;
         });
     </script>
 </body>

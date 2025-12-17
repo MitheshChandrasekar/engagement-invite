@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>We're Getting Engaged! 💍</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        .names {
+            font-size: 2.5em;
+            color: #667eea;
+            margin: 20px 0;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards;
+        }
+
+        .heart {
+            font-size: 2em;
+            color: #e74c3c;
+            opacity: 0;
+            animation: heartbeat 1.5s ease infinite, fadeIn 0.5s ease 0.5s forwards;
+        }
+
+        .date {
+            font-size: 1.5em;
+            color: #555;
+            margin: 20px 0;
+            opacity: 0;
+            animation: fadeIn 1s ease 1s forwards;
+        }
+
+        .countdown {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 30px 0;
+            opacity: 0;
+            animation: fadeIn 1s ease 1.5s forwards;
+        }
+
+        .countdown h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .timer {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .time-unit {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            min-width: 80px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .time-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .time-label {
+            font-size: 0.9em;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        .location-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1em;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 20px;
+            opacity: 0;
+            animation: fadeIn 1s ease 2s forwards;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .location-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .music-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 1.5em;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .music-control:hover {
+            transform: scale(1.1);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.2); }
+        }
+
+        .message {
+            color: #666;
+            font-style: italic;
+            margin: 20px 0;
+            opacity: 0;
+            animation: fadeIn 1s ease 2.5s forwards;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1 style="color: #764ba2; margin-bottom: 10px;">We're Getting Engaged!</h1>
+        
+        <div class="names" id="names">John & Jane</div>
+        <div class="heart">❤️</div>
+        
+        <div class="date" id="date">December 25, 2024</div>
+        
+        <div class="countdown">
+            <h3>Counting Down To Our Special Day</h3>
+            <div class="timer" id="timer">
+                <div class="time-unit">
+                    <div class="time-value" id="days">0</div>
+                    <div class="time-label">Days</div>
+                </div>
+                <div class="time-unit">
+                    <div class="time-value" id="hours">0</div>
+                    <div class="time-label">Hours</div>
+                </div>
+                <div class="time-unit">
+                    <div class="time-value" id="minutes">0</div>
+                    <div class="time-label">Minutes</div>
+                </div>
+                <div class="time-unit">
+                    <div class="time-value" id="seconds">0</div>
+                    <div class="time-label">Seconds</div>
+                </div>
+            </div>
+        </div>
+
+        <p class="message">"Two hearts, one love, forever together"</p>
+        
+        <button class="location-btn" onclick="openLocation()">
+            📍 View Venue Location
+        </button>
+    </div>
+
+    <button class="music-control" id="musicBtn" onclick="toggleMusic()">🔇</button>
+
+    <audio id="bgMusic" loop>
+        <source src="https://cdnjs.cloudflare.com/ajax/libs/audiojs/1.0.1/audio.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // Customize these values
+        const COUPLE_NAMES = "Rohith & Amritha"; // Change to your names
+        const ENGAGEMENT_DATE = "2026-01-25 10:30:00"; // Change to your date (YYYY-MM-DD HH:MM:SS)
+        const VENUE_LOCATION = "https://maps.app.goo.gl/S75qzs3HjQTmoBZe8"; // Change to your venue
+
+        // Update names
+        document.getElementById('names').textContent = COUPLE_NAMES;
+
+        // Format and display date
+        const dateObj = new Date(ENGAGEMENT_DATE);
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('date').textContent = dateObj.toLocaleDateString('en-US', options);
+
+        // Countdown timer
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const target = new Date(ENGAGEMENT_DATE).getTime();
+            const diff = target - now;
+
+            if (diff > 0) {
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+                document.getElementById('days').textContent = days;
+                document.getElementById('hours').textContent = hours;
+                document.getElementById('minutes').textContent = minutes;
+                document.getElementById('seconds').textContent = seconds;
+            } else {
+                document.getElementById('days').textContent = "0";
+                document.getElementById('hours').textContent = "0";
+                document.getElementById('minutes').textContent = "0";
+                document.getElementById('seconds').textContent = "0";
+            }
+        }
+
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+
+        // Music control
+        let isPlaying = false;
+        const music = document.getElementById('bgMusic');
+        const musicBtn = document.getElementById('musicBtn');
+
+        // Auto-play attempt (may be blocked by browser)
+        window.addEventListener('load', () => {
+            music.play().then(() => {
+                isPlaying = true;
+                musicBtn.textContent = '🔊';
+            }).catch(() => {
+                console.log('Autoplay blocked. User needs to click to play.');
+            });
+        });
+
+        function toggleMusic() {
+            if (isPlaying) {
+                music.pause();
+                musicBtn.textContent = '🔇';
+            } else {
+                music.play();
+                musicBtn.textContent = '🔊';
+            }
+            isPlaying = !isPlaying;
+        }
+
+        // Location button
+        function openLocation() {
+            window.open(VENUE_LOCATION, '_blank');
+        }
+    </script>
+</body>
+</html>
